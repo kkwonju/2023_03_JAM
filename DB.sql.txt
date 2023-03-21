@@ -1,6 +1,10 @@
+### 0317 ###
+
 DROP DATABASE IF EXISTS `JAM`;
 CREATE DATABASE `JAM`;
 USE `JAM`;
+
+### 2023 03 21 ###
 
 DROP DATABASE IF EXISTS `JAM`;
 CREATE DATABASE `JAM`;
@@ -16,6 +20,9 @@ title CHAR(100) NOT NULL,
 
 SHOW TABLES;
 DESC article;
+
+SELECT *
+FROM article;
 
 INSERT INTO article
 SET regDate = NOW(),
