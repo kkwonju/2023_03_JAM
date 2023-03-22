@@ -3,6 +3,7 @@ package com.koreaIT.example.JAM;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -12,9 +13,11 @@ import com.koreaIT.example.JAM.util.DBUtil;
 import com.koreaIT.example.JAM.util.SecSql;
 
 public class App {
+	
 	public void start() {
 		System.out.println("== 프로그램 시작 ==");
 		Scanner sc = new Scanner(System.in);
+		
 
 		while (true) {
 			System.out.print("명령어 ) ");
@@ -54,6 +57,8 @@ public class App {
 	}
 
 	private int doAction(Connection conn, Scanner sc, String command) {
+		
+		
 		/* command 입력값이 없을 때 */
 		if (command.length() == 0) {
 			System.out.println("명령어를 입력해주세요");
@@ -197,6 +202,70 @@ public class App {
 			DBUtil.delete(conn, sql);
 
 			System.out.println(id + "번 게시물이 삭제되었습니다");
+
+		} else if (command.equals("member join")) {
+			System.out.println("== 회원가입 ==");
+			
+			String loginId = null;
+			String loginPw = null;
+			String name = null;
+			
+			
+			while (true) {
+				System.out.print("아이디 : ");
+				loginId = sc.nextLine().trim();
+				
+				if(loginId.length() == 0) {
+					System.out.println("필수 입력란입니다");
+					continue;
+				}
+				break;
+			}
+			while (true) {
+				System.out.print("비밀번호 : ");
+				loginPw = sc.nextLine().trim();
+				
+				if(loginPw.length() == 0) {
+					System.out.println("필수 입력란입니다");
+					continue;
+				}
+				
+				System.out.print("비밀번호 확인 : ");
+				String loginPwConfirm = sc.nextLine();
+				
+				if(loginPw.length() == 0) {
+					System.out.println("필수 입력란입니다");
+					continue;
+				}
+				if(loginPw.equals(loginPwConfirm) == false) {
+					System.out.println("비밀번호를 확인해주세요");
+					continue;
+				}
+				break;
+			}
+			while(true) {
+				System.out.print("이름 : ");
+				name = sc.nextLine().trim();
+				
+				if(name.length() == 0) {
+					System.out.println("필수 입력란입니다");
+					continue;
+				}
+				break;
+			}
+			
+			SecSql sql = new SecSql();
+
+			sql.append("INSERT INTO member");
+			sql.append("SET regDate = NOW()");
+			sql.append(", updateDate = NOW()");
+			sql.append(", loginId = ?", loginId);
+			sql.append(", loginPw = ?", loginPw);
+			sql.append(", `name` = ?", name);
+
+			int id = DBUtil.insert(conn, sql);
+
+			System.out.println(id + "번 회원 가입");
 
 		} else {
 			System.out.println("명령어를 확인해주세요");
