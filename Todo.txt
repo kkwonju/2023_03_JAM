@@ -1,19 +1,2 @@
 TODO
 
-각 기능 내부에서 Connection 하지 않고
-명령어 입력시 연결하도록
-
-App (
-    start(
-        Connection
-        <
-	기능( JAVA 명령 ( SQL 명령 ) )
-        >
-        disConnection
-    )
-    기능 구현 
-    (SQL 명령에 필요한 conn,
-     JAVA 명령에 필요한 sc,
-     JAVA 명령문 해체에 필요한 command
-     )
-) 

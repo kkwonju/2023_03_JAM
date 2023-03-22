@@ -1,3 +1,5 @@
+------------------------------------------------------------------------------------
+2023 03 22
 
 # a5 데이터베이스 삭제/생성/선택
 DROP DATABASE IF EXISTS `a5`;
@@ -242,6 +244,7 @@ INNER JOIN dept
 ON dept.id = emp.deptId
 GROUP BY emp.deptId;
   
+  
 ## V3(V2에서 평균연봉이 5000이상인 부서로 추리기) ? 
 SELECT
   dept.name AS '부서명',
@@ -254,7 +257,7 @@ FROM emp
 INNER JOIN dept
 ON dept.id = emp.deptId
 GROUP BY emp.deptId
-HAVING 평균연봉 >= 5000;
+HAVING AVG(emp.salary) >= 5000;
 
 ## V4(V3에서 HAVING 없이 서브쿼리로 수행)
 ### HINT, UNION을 이용한 서브쿼리

@@ -41,7 +41,7 @@ public class JDBCSelectTest {
 				String updateDate = rs.getString("updateDate");
 				String title = rs.getString("title");
 				String body = rs.getString("body");
-				forPrintArticles.add(new Article(id, regDate, updateDate, title, body));
+//				forPrintArticles.add(new Article(id, regDate, updateDate, title, body));
 			}
 			
 			int affectedRow = pstmt.executeUpdate();
