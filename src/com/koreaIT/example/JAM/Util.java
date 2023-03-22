@@ -11,4 +11,11 @@ public class Util {
         String formatedNow = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         return formatedNow;
     }
+    
+    public static String getNotDateTimeStr(LocalDateTime DateTime) {
+    	
+        String formatedDateTime = DateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        
+        return formatedDateTime;
+    }
 }

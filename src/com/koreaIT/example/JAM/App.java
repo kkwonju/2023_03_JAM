@@ -2,8 +2,6 @@ package com.koreaIT.example.JAM;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -154,29 +152,22 @@ public class App {
 
 			SecSql sql = new SecSql();
 
-			sql.append("SELECT COUNT(*)");
-			sql.append(" FROM article");
-			sql.append("WHERE id = ?", id);
-
-			int articlesCount = DBUtil.selectRowIntValue(conn, sql);
-
-			if (articlesCount == 0) {
-				System.out.println(id + "번 글은 존재하지 않습니다");
-				return 0;
-			}
-
-			sql = new SecSql();
-
 			sql.append("SELECT *");
 			sql.append("FROM article");
 			sql.append("WHERE id = ?", id);
 
 			Map<String, Object> articleMap = DBUtil.selectRow(conn, sql);
+
+			if (articleMap.isEmpty()) {
+				System.out.println(id + "번 글은 존재하지 않습니다");
+				return 0;
+			}
+
 			Article article = new Article(articleMap);
 
 			System.out.println("번호 : " + article.id);
-			System.out.println("작성일 : " + article.regDate);
-			System.out.println("수정일 : " + article.updateDate);
+			System.out.println("작성일 : " + Util.getNotDateTimeStr(article.regDate));
+			System.out.println("수정일 : " + Util.getNotDateTimeStr(article.updateDate));
 			System.out.println("제목 : " + article.title);
 			System.out.println("내용 : " + article.body);
 
