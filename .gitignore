@@ -3,6 +3,6 @@
 .settings
 bin
 build
+DB.sql.txt
+DB_Test.txt
 DB.sql
-DB_Test
-DB
