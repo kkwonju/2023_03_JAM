@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import javax.sound.midi.Sequence;
+
+import com.koreaIT.example.JAM.controller.MemberController;
 import com.koreaIT.example.JAM.util.DBUtil;
 import com.koreaIT.example.JAM.util.SecSql;
 
@@ -36,7 +39,7 @@ public class App {
 			try {
 				conn = DriverManager.getConnection(url, "root", "");
 
-				int actionResult = doAction(conn, sc, command);
+				int actionResult = Action(conn, sc, command);
 
 				if (actionResult == -1) {
 					System.out.println("프로그램 종료");
@@ -56,8 +59,7 @@ public class App {
 		}
 	}
 
-	private int doAction(Connection conn, Scanner sc, String command) {
-		
+	private int Action(Connection conn, Scanner sc, String command) {
 		
 		/* command 입력값이 없을 때 */
 		if (command.length() == 0) {
@@ -68,6 +70,11 @@ public class App {
 		if (command.equals("exit")) {
 			return -1;
 		}
+		
+		MemberController memberController = new MemberController();
+		memberController.setConn(conn);
+		memberController.setScanner(sc);
+		
 		/* 게시물 작성 */
 		if (command.equals("article write")) {
 			System.out.println("== 게시물 작성 ==");
@@ -203,73 +210,15 @@ public class App {
 
 			System.out.println(id + "번 게시물이 삭제되었습니다");
 
+			/* 회원가입 기능 */
 		} else if (command.equals("member join")) {
-			System.out.println("== 회원가입 ==");
+			memberController.doJoin(command);
 			
-			String loginId = null;
-			String loginPw = null;
-			String name = null;
-			
-			
-			while (true) {
-				System.out.print("아이디 : ");
-				loginId = sc.nextLine().trim();
-				
-				if(loginId.length() == 0) {
-					System.out.println("필수 입력란입니다");
-					continue;
-				}
-				break;
-			}
-			while (true) {
-				System.out.print("비밀번호 : ");
-				loginPw = sc.nextLine().trim();
-				
-				if(loginPw.length() == 0) {
-					System.out.println("필수 입력란입니다");
-					continue;
-				}
-				
-				System.out.print("비밀번호 확인 : ");
-				String loginPwConfirm = sc.nextLine();
-				
-				if(loginPw.length() == 0) {
-					System.out.println("필수 입력란입니다");
-					continue;
-				}
-				if(loginPw.equals(loginPwConfirm) == false) {
-					System.out.println("비밀번호를 확인해주세요");
-					continue;
-				}
-				break;
-			}
-			while(true) {
-				System.out.print("이름 : ");
-				name = sc.nextLine().trim();
-				
-				if(name.length() == 0) {
-					System.out.println("필수 입력란입니다");
-					continue;
-				}
-				break;
-			}
-			
-			SecSql sql = new SecSql();
-
-			sql.append("INSERT INTO member");
-			sql.append("SET regDate = NOW()");
-			sql.append(", updateDate = NOW()");
-			sql.append(", loginId = ?", loginId);
-			sql.append(", loginPw = ?", loginPw);
-			sql.append(", `name` = ?", name);
-
-			int id = DBUtil.insert(conn, sql);
-
-			System.out.println(id + "번 회원 가입");
-
 		} else {
 			System.out.println("명령어를 확인해주세요");
 		}
 		return 0;
 	}
+
+
 }

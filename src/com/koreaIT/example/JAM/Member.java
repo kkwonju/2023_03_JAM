@@ -1,6 +1,7 @@
 package com.koreaIT.example.JAM;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 public class Member {
 	public int id;
@@ -9,7 +10,7 @@ public class Member {
 	public String loginId;
 	public String loginPw;
 	public String name;
-	
+
 	public Member(int id, LocalDateTime regDate, LocalDateTime updateDate, String loginId, String loginPw, String name) {
 		this.id = id;
 		this.regDate = regDate;
