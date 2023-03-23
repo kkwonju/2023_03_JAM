@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.koreaIT.example.JAM.Article;
+import com.koreaIT.example.JAM.dto.Article;
 
 public class JDBCSelectTest {
 	public static void main(String[] args) {

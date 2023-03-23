@@ -1,24 +1,11 @@
 package com.koreaIT.example.JAM.controller;
 
-import java.sql.Connection;
-import java.util.Scanner;
-
 import com.koreaIT.example.JAM.util.DBUtil;
 import com.koreaIT.example.JAM.util.SecSql;
 
-public class MemberController {
-	private Connection conn;
-	private Scanner sc;
-
+public class MemberController extends Controller{
 	
-	public void setConn(Connection conn) {
-		this.conn = conn;
-	}
-
-	public void setScanner(Scanner sc) {
-		this.sc = sc;
-	}
-
+	/** 회원가입 */
 	public void doJoin(String command) {
 		String loginId = null;
 		String loginPw = null;
@@ -94,6 +81,5 @@ public class MemberController {
 		int id = DBUtil.insert(conn, sql);
 
 		System.out.println(id + "번 회원 가입");
-
 	}
 }

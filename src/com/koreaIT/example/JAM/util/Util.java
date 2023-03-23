@@ -1,4 +1,4 @@
-package com.koreaIT.example.JAM;
+package com.koreaIT.example.JAM.util;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
