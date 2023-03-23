@@ -1,14 +1,23 @@
 package com.koreaIT.example.JAM.controller;
 
-import com.koreaIT.example.JAM.util.DBUtil;
-import com.koreaIT.example.JAM.util.SecSql;
+import java.sql.Connection;
+import java.util.Scanner;
+
+import com.koreaIT.example.JAM.service.MemberService;
 
 public class MemberController extends Controller{
+	private MemberService memberService;
+	
+	public MemberController(Connection conn, Scanner sc) {
+		super(sc);
+		memberService = new MemberService(conn);
+	}
 	
 	/** 회원가입 */
 	public void doJoin(String command) {
 		String loginId = null;
 		String loginPw = null;
+		String loginPwConfirm = null;
 		String name = null;
 		
 		System.out.println("== 회원가입 ==");
@@ -22,13 +31,7 @@ public class MemberController extends Controller{
 				continue;
 			}
 			
-			SecSql sql = new SecSql();
-
-			sql.append("SELECT COUNT(*) > 0");
-			sql.append("FROM `member`");
-			sql.append("WHERE loginId = ?", loginId);
-
-			boolean isLoginIdDup= DBUtil.selectRowBooleanValue(conn, sql);
+			boolean isLoginIdDup = memberService.isLoginIdDup(loginId);
 			
 			if(isLoginIdDup) {
 				System.out.println(loginId + "는(은) 이미 사용중인 아이디입니다");
@@ -46,7 +49,7 @@ public class MemberController extends Controller{
 			}
 			
 			System.out.print("비밀번호 확인 : ");
-			String loginPwConfirm = sc.nextLine();
+			loginPwConfirm = sc.nextLine();
 			
 			if(loginPw.length() == 0) {
 				System.out.println("필수 입력란입니다");
@@ -69,17 +72,8 @@ public class MemberController extends Controller{
 			break;
 		}
 		
-		SecSql sql = new SecSql();
+		memberService.doJoin(loginId, loginPw, name);
 
-		sql.append("INSERT INTO member");
-		sql.append("SET regDate = NOW()");
-		sql.append(", updateDate = NOW()");
-		sql.append(", loginId = ?", loginId);
-		sql.append(", loginPw = ?", loginPw);
-		sql.append(", `name` = ?", name);
-
-		int id = DBUtil.insert(conn, sql);
-
-		System.out.println(id + "번 회원 가입");
+		System.out.println(name + "님, 가입되었습니다");
 	}
 }

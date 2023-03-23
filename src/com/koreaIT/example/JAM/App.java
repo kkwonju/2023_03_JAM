@@ -3,23 +3,16 @@ package com.koreaIT.example.JAM;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 import com.koreaIT.example.JAM.controller.ArticleController;
 import com.koreaIT.example.JAM.controller.MemberController;
-import com.koreaIT.example.JAM.dto.Article;
-import com.koreaIT.example.JAM.util.DBUtil;
-import com.koreaIT.example.JAM.util.SecSql;
 
 public class App {
-	
+
 	public void start() {
 		System.out.println("== 프로그램 시작 ==");
 		Scanner sc = new Scanner(System.in);
-		
 
 		while (true) {
 			System.out.print("명령어 ) ");
@@ -57,9 +50,10 @@ public class App {
 			}
 		}
 	}
+
 	/* 실제 기능을 실행하는 메서드가 아니므로 do 빼줌 */
 	private int action(Connection conn, Scanner sc, String command) {
-		
+
 		/* command 입력값이 없을 때 */
 		if (command.length() == 0) {
 			System.out.println("명령어를 입력해주세요");
@@ -69,36 +63,30 @@ public class App {
 		if (command.equals("exit")) {
 			return -1;
 		}
-		
-		ArticleController articleController = new ArticleController();
-		articleController.setConn(conn);
-		articleController.setScanner(sc);
-		
-		MemberController memberController = new MemberController();
-		memberController.setConn(conn);
-		memberController.setScanner(sc);
-		
-		
-			/* 회원가입 기능 */
-		 if (command.equals("member join")) {
-				memberController.doJoin(command);
-				
+
+		ArticleController articleController = new ArticleController(conn, sc);
+		MemberController memberController = new MemberController(conn, sc);
+
+		/* 회원가입 기능 */
+		if (command.equals("member join")) {
+			memberController.doJoin(command);
+
 			/* 게시물 작성 */
-		 } else if (command.equals("article write")) {
+		} else if (command.equals("article write")) {
 			articleController.doWrite();
-			
+
 			/* 게시물 목록 출력 */
 		} else if (command.equals("article list")) {
 			articleController.showList();
-			
+
 			/* 게시글 수정 */
 		} else if (command.startsWith("article modify")) {
 			articleController.doModify(command);
-			
+
 			/* 게시글 상세보기 */
 		} else if (command.startsWith("article detail")) {
 			articleController.showDetail(command);
-			
+
 			/* 게시글 삭제 */
 		} else if (command.startsWith("article delete")) {
 			articleController.doDelete(command);
@@ -108,6 +96,5 @@ public class App {
 		}
 		return 0;
 	}
-
 
 }
