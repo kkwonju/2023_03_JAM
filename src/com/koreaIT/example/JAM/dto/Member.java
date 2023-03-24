@@ -28,4 +28,10 @@ public class Member {
 		this.loginPw = (String) memberMap.get("loginPw");
 		this.name = (String) memberMap.get("name");
 	}
+	
+	@Override
+	public String toString() {
+		return "Member [id=" + id + ", regDate=" + regDate + ", updateDate=" + updateDate + ", loginId=" + loginId
+				+ ", loginPw=" + loginPw + ", name=" + name + "]";
+	}
 }

@@ -75,6 +75,7 @@ public class MemberController extends Controller {
 		System.out.println(name + "님, 가입되었습니다");
 	}
 
+	/** 로그인 기능*/
 	public void doLogin() {
 		String loginId = null;
 		String loginPw = null;
@@ -122,9 +123,17 @@ public class MemberController extends Controller {
 			}
 			break;
 		}
-		
-//		memberService.doLogin(loginId, loginPw);
+		Container.session.loginedMember = member;
+		Container.session.loginedMemberId = member.id;
 		
 		System.out.println(member.name + "님, 반갑습니다");
+	}
+
+	public void showProfile() {
+		if(Container.session.loginedMemberId == -1) {
+			System.out.println("로그인 상태가 아닙니다");
+		} else {
+			System.out.println(Container.session.loginedMember);
+		}
 	}
 }

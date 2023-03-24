@@ -77,7 +77,9 @@ public class App {
 			/* 로그인 기능 */
 		} else if (command.equals("member login")) {
 			memberController.doLogin();
-
+			/* 회원정보 보기 */
+		} else if (command.equals("member profile")){
+			memberController.showProfile();
 			/* 게시물 작성 */
 		} else if (command.equals("article write")) {
 			articleController.doWrite();
@@ -87,19 +89,19 @@ public class App {
 			articleController.showList();
 
 			/* 게시글 수정 */
-		} else if (command.startsWith("article modify")) {
+		} else if (command.startsWith("article modify ")) {
 			articleController.doModify(command);
 
 			/* 게시글 상세보기 */
-		} else if (command.startsWith("article detail")) {
+		} else if (command.startsWith("article detail ")) {
 			articleController.showDetail(command);
 
 			/* 게시글 삭제 */
-		} else if (command.startsWith("article delete")) {
+		} else if (command.startsWith("article delete ")) {
 			articleController.doDelete(command);
 
 		} else {
-			System.out.println("명령어를 확인해주세요");
+			System.out.println("존재하지 않는 명령어입니다");
 		}
 		return 0;
 	}
