@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import com.koreaIT.example.JAM.container.Container;
 import com.koreaIT.example.JAM.controller.ArticleController;
 import com.koreaIT.example.JAM.controller.MemberController;
 
@@ -12,11 +13,13 @@ public class App {
 
 	public void start() {
 		System.out.println("== 프로그램 시작 ==");
-		Scanner sc = new Scanner(System.in);
+		Container.sc = new Scanner(System.in);
+		
+		Container.init();
 
 		while (true) {
 			System.out.print("명령어 ) ");
-			String command = sc.nextLine().trim();
+			String command = Container.sc.nextLine().trim();
 
 			Connection conn = null;
 
@@ -30,8 +33,10 @@ public class App {
 
 			try {
 				conn = DriverManager.getConnection(url, "root", "");
-
-				int actionResult = action(conn, sc, command);
+				Container.conn  = conn;
+				
+				
+				int actionResult = action(command);
 
 				if (actionResult == -1) {
 					System.out.println("프로그램 종료");
@@ -52,8 +57,11 @@ public class App {
 	}
 
 	/* 실제 기능을 실행하는 메서드가 아니므로 do 빼줌 */
-	private int action(Connection conn, Scanner sc, String command) {
-
+	private int action(String command) {
+		
+		ArticleController articleController = Container.articleController;
+		MemberController memberController = Container.memberController;
+		
 		/* command 입력값이 없을 때 */
 		if (command.length() == 0) {
 			System.out.println("명령어를 입력해주세요");
@@ -63,10 +71,6 @@ public class App {
 		if (command.equals("exit")) {
 			return -1;
 		}
-
-		ArticleController articleController = new ArticleController(conn, sc);
-		MemberController memberController = new MemberController(conn, sc);
-
 		/* 회원가입 기능 */
 		if (command.equals("member join")) {
 			memberController.doJoin(command);

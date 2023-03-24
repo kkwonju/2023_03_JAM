@@ -1,17 +1,17 @@
 package com.koreaIT.example.JAM.service;
 
-import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
+import com.koreaIT.example.JAM.container.Container;
 import com.koreaIT.example.JAM.dao.ArticleDao;
 import com.koreaIT.example.JAM.dto.Article;
 
 public class ArticleService {
 	private ArticleDao articleDao;
-
-	public ArticleService(Connection conn) {
-		articleDao = new ArticleDao(conn);
+	
+	public ArticleService() {
+		this.articleDao = Container.articleDao;
 	}
 
 	public int doWrite(String title, String body) {

@@ -1,10 +1,9 @@
 package com.koreaIT.example.JAM.controller;
 
-import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
+import com.koreaIT.example.JAM.container.Container;
 import com.koreaIT.example.JAM.dto.Article;
 import com.koreaIT.example.JAM.service.ArticleService;
 import com.koreaIT.example.JAM.util.Util;
@@ -12,9 +11,8 @@ import com.koreaIT.example.JAM.util.Util;
 public class ArticleController extends Controller {
 	private ArticleService articleService;
 
-	public ArticleController(Connection conn, Scanner sc) {
-		super(sc);
-		articleService = new ArticleService(conn);
+	public ArticleController() {
+		articleService = Container.articleService;
 	}
 
 	/** 게시글 작성 */
@@ -22,10 +20,10 @@ public class ArticleController extends Controller {
 		System.out.println("== 게시물 작성 ==");
 		
 		System.out.print("제목 : ");
-		String title = sc.nextLine();
+		String title = Container.sc.nextLine();
 		
 		System.out.print("내용 : ");
-		String body = sc.nextLine();
+		String body = Container.sc.nextLine();
 
 		int id = articleService.doWrite(title, body);
 
@@ -93,9 +91,9 @@ public class ArticleController extends Controller {
 
 		System.out.println("== 게시물 수정 ==");
 		System.out.print("새 제목 : ");
-		String title = sc.nextLine();
+		String title = Container.sc.nextLine();
 		System.out.print("새 내용 : ");
-		String body = sc.nextLine();
+		String body = Container.sc.nextLine();
 
 		articleService.doModify(title, body, id);
 

@@ -1,18 +1,14 @@
 package com.koreaIT.example.JAM.controller;
 
-import java.sql.Connection;
-import java.util.Map;
-import java.util.Scanner;
-
+import com.koreaIT.example.JAM.container.Container;
 import com.koreaIT.example.JAM.dto.Member;
 import com.koreaIT.example.JAM.service.MemberService;
 
 public class MemberController extends Controller {
 	private MemberService memberService;
 
-	public MemberController(Connection conn, Scanner sc) {
-		super(sc);
-		memberService = new MemberService(conn);
+	public MemberController() {
+		memberService = Container.memberService;
 	}
 
 	/** 회원가입 */
@@ -26,7 +22,7 @@ public class MemberController extends Controller {
 
 		while (true) {
 			System.out.print("아이디 : ");
-			loginId = sc.nextLine().trim();
+			loginId = Container.sc.nextLine().trim();
 
 			if (loginId.length() == 0) {
 				System.out.println("필수 입력란입니다");
@@ -43,7 +39,7 @@ public class MemberController extends Controller {
 		}
 		while (true) {
 			System.out.print("비밀번호 : ");
-			loginPw = sc.nextLine().trim();
+			loginPw = Container.sc.nextLine().trim();
 
 			if (loginPw.length() == 0) {
 				System.out.println("필수 입력란입니다");
@@ -51,7 +47,7 @@ public class MemberController extends Controller {
 			}
 
 			System.out.print("비밀번호 확인 : ");
-			loginPwConfirm = sc.nextLine();
+			loginPwConfirm = Container.sc.nextLine();
 
 			if (loginPw.length() == 0) {
 				System.out.println("필수 입력란입니다");
@@ -65,7 +61,7 @@ public class MemberController extends Controller {
 		}
 		while (true) {
 			System.out.print("이름 : ");
-			name = sc.nextLine().trim();
+			name = Container.sc.nextLine().trim();
 
 			if (name.length() == 0) {
 				System.out.println("필수 입력란입니다");
@@ -85,7 +81,7 @@ public class MemberController extends Controller {
 		
 		while (true) {
 			System.out.print("아이디 : ");
-			loginId = sc.nextLine().trim();
+			loginId = Container.sc.nextLine().trim();
 
 			if (loginId.length() == 0) {
 				System.out.println("필수 입력란입니다");
@@ -107,11 +103,11 @@ public class MemberController extends Controller {
 		int tryCount = 0;
 		while (true) {
 			if (tryCount >= maxTryCount) {
-				System.out.println("비밀번호를 확인하고 입력해주세요");
+				System.out.println("비밀번호를 확인하고 다시 입력해주세요");
 				break;
 			}
 			System.out.print("비밀번호 : ");
-			loginPw = sc.nextLine().trim();
+			loginPw = Container.sc.nextLine().trim();
 
 			if (loginPw.length() == 0) {
 				tryCount++;
