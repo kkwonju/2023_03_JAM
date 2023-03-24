@@ -77,6 +77,9 @@ public class App {
 			/* 로그인 기능 */
 		} else if (command.equals("member login")) {
 			memberController.doLogin();
+			/* 로그아웃 기능 */
+		} else if (command.equals("member logout")){
+			memberController.doLogout();
 			/* 회원정보 보기 */
 		} else if (command.equals("member profile")){
 			memberController.showProfile();
