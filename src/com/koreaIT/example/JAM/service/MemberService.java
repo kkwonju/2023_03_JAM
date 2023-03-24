@@ -1,5 +1,7 @@
 package com.koreaIT.example.JAM.service;
 
+import java.util.List;
+
 import com.koreaIT.example.JAM.container.Container;
 import com.koreaIT.example.JAM.dao.MemberDao;
 import com.koreaIT.example.JAM.dto.Member;
@@ -21,5 +23,9 @@ public class MemberService {
 
 	public Member getMemberByLoginId(String loginId) {
 		return memberDao.getMemberByLoginId(loginId);
+	}
+
+	public static List<Member> getMembers() {
+		return MemberDao.getMembers();
 	}
 }

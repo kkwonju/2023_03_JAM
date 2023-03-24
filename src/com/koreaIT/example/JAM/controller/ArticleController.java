@@ -5,7 +5,9 @@ import java.util.Map;
 
 import com.koreaIT.example.JAM.container.Container;
 import com.koreaIT.example.JAM.dto.Article;
+import com.koreaIT.example.JAM.dto.Member;
 import com.koreaIT.example.JAM.service.ArticleService;
+import com.koreaIT.example.JAM.service.MemberService;
 import com.koreaIT.example.JAM.util.Util;
 
 public class ArticleController extends Controller {
@@ -17,17 +19,17 @@ public class ArticleController extends Controller {
 
 	/** 게시글 작성 */
 	public void doWrite() {
-		if(Container.session.isLogined() == false) {
+		if (Container.session.isLogined() == false) {
 			System.out.println("로그인 후 이용해주세요");
 			return;
 		}
-		
+
 		System.out.println("== 게시물 작성 ==");
 		System.out.print("제목 : ");
 		String title = Container.sc.nextLine();
 		System.out.print("내용 : ");
 		String body = Container.sc.nextLine();
-		
+
 		int memberId = Container.session.loginedMemberId;
 
 		int id = articleService.doWrite(memberId, title, body);
@@ -47,16 +49,29 @@ public class ArticleController extends Controller {
 
 		System.out.println("== 게시물 목록 ==");
 		System.out.println(" 번호  /  제목  ");
-
-		for (Article article : articles) {
-			System.out.printf("  %d    /    %s \n", article.id, article.title);
+		
+		List<Member> members = MemberService.getMembers();
+		// DBUtil selectRow는 데이터의 마지막부터 가져온다? 검증 필요
+		
+//		for(int i = articles.size() - 1; i >= 0; i--){
+		for(int i = 0; i < articles.size(); i++) {
+			Article article = articles.get(i);
+			
+			String writerName = null;
+			for(Member member : members) {
+				if(member.id == article.memberId) {
+					writerName = member.name;
+					break;
+				}
+			}
+			System.out.printf("  %d   /   %s   /   %s   \n", article.id, writerName, article.title);
 		}
 	}
 
 	/** 게시글 상세보기 */
 	public void showDetail(String command) {
 		String[] comDiv = command.split(" ");
-		if(comDiv.length < 3) {
+		if (comDiv.length < 3) {
 			System.out.println("게시글 번호를 확인해주세요");
 			return;
 		}
@@ -80,12 +95,12 @@ public class ArticleController extends Controller {
 
 	/** 게시글 수정 */
 	public void doModify(String command) {
-		if(Container.session.isLogined() == false) {
+		if (Container.session.isLogined() == false) {
 			System.out.println("로그인 후 이용해주세요");
 			return;
 		}
 		String[] comDiv = command.split(" ");
-		if(comDiv.length < 3) {
+		if (comDiv.length < 3) {
 			System.out.println("게시글 번호를 확인해주세요");
 			return;
 		}
@@ -112,12 +127,12 @@ public class ArticleController extends Controller {
 
 	/** 게시글 삭제 */
 	public void doDelete(String command) {
-		if(Container.session.isLogined() == false) {
+		if (Container.session.isLogined() == false) {
 			System.out.println("로그인 후 이용해주세요");
 			return;
 		}
 		String[] comDiv = command.split(" ");
-		if(comDiv.length < 3) {
+		if (comDiv.length < 3) {
 			System.out.println("게시글 번호를 확인해주세요");
 			return;
 		}

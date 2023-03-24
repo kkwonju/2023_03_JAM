@@ -1,8 +1,11 @@
 package com.koreaIT.example.JAM.dao;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import com.koreaIT.example.JAM.container.Container;
+import com.koreaIT.example.JAM.dto.Article;
 import com.koreaIT.example.JAM.dto.Member;
 import com.koreaIT.example.JAM.util.DBUtil;
 import com.koreaIT.example.JAM.util.SecSql;
@@ -46,5 +49,21 @@ public class MemberDao {
 		}
 
 		return new Member(memberMap);
+	}
+
+	public static List<Member> getMembers() {
+		SecSql sql = new SecSql();
+
+		sql.append("SELECT *");
+		sql.append("FROM `member`");
+		sql.append("ORDER BY id DESC;");
+
+		List<Member> members = new ArrayList<>();
+		List<Map<String, Object>> memberListMap = DBUtil.selectRows(Container.conn, sql);
+
+		for (Map<String, Object> memberMap : memberListMap) {
+			members.add(new Member(memberMap));
+		}
+		return members;
 	}
 }
