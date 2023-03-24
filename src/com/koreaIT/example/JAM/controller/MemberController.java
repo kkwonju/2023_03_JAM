@@ -13,7 +13,7 @@ public class MemberController extends Controller {
 
 	/** 회원가입 */
 	public void doJoin(String command) {
-		if(Container.session.isLogined()) {
+		if(Container.session.isLogined() == true) {
 			System.out.println("로그아웃 후 이용해주세요");
 			return;
 		}
@@ -81,7 +81,7 @@ public class MemberController extends Controller {
 
 	/** 로그인 기능*/
 	public void doLogin() {
-		if(Container.session.isLogined()) {
+		if(Container.session.isLogined() == true) {
 			System.out.println("로그아웃 후 이용해주세요");
 			return;
 		}
@@ -145,7 +145,7 @@ public class MemberController extends Controller {
 	}
 
 	public void doLogout() {
-		if(Container.session.isLogined()) {
+		if(Container.session.isLogined() == true) {
 			Container.session.logout();
 			System.out.println("로그아웃되었습니다");
 		} else {

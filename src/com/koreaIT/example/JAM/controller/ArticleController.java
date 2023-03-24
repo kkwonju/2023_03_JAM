@@ -23,14 +23,14 @@ public class ArticleController extends Controller {
 		}
 		
 		System.out.println("== 게시물 작성 ==");
-		
 		System.out.print("제목 : ");
 		String title = Container.sc.nextLine();
-		
 		System.out.print("내용 : ");
 		String body = Container.sc.nextLine();
+		
+		int memberId = Container.session.loginedMemberId;
 
-		int id = articleService.doWrite(title, body);
+		int id = articleService.doWrite(memberId, title, body);
 
 		System.out.println(id + "번 글이 생성되었습니다");
 	}
@@ -122,7 +122,6 @@ public class ArticleController extends Controller {
 			return;
 		}
 		int id = Integer.parseInt(comDiv[2]);
-
 
 		int articlesCount = articleService.getArticlesCount(id);
 
