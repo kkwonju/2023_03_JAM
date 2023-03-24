@@ -70,6 +70,9 @@ public class App {
 		/* 회원가입 기능 */
 		if (command.equals("member join")) {
 			memberController.doJoin(command);
+			/* 로그인 기능 */
+		} else if (command.equals("member login")) {
+			memberController.doLogin();
 
 			/* 게시물 작성 */
 		} else if (command.equals("article write")) {
