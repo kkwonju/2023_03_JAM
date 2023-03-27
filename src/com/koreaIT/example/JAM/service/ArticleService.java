@@ -14,12 +14,12 @@ public class ArticleService {
 		this.articleDao = Container.articleDao;
 	}
 
-	public int doWrite(int memberId, String title, String body) {
-		return articleDao.doWrite(memberId, title, body);
+	public int doWrite(int memberId, String title, String body, int hit) {
+		return articleDao.doWrite(memberId, title, body, hit);
 	}
 
-	public Map<String, Object> getArticle(int id) {
-		return articleDao.getArticle(id);
+	public Map<String, Object> getArticleById(int id) {
+		return articleDao.getArticleById(id);
 	}
 
 	public int getArticlesCount(int id) {
@@ -37,6 +37,10 @@ public class ArticleService {
 
 	public List<Article> getArticles() {
 		return articleDao.getArticles();
+	}
+
+	public void increaseHit(int id) {
+		articleDao.increaseHit(id);
 	}
 
 }

@@ -11,7 +11,7 @@ import com.koreaIT.example.JAM.util.SecSql;
 
 public class ArticleDao {
 	
-	public int doWrite(int memberId, String title, String body) {
+	public int doWrite(int memberId, String title, String body, int hit) {
 		SecSql sql = new SecSql();
 
 		sql.append("INSERT INTO article");
@@ -20,11 +20,12 @@ public class ArticleDao {
 		sql.append(", memberId = ?", memberId);
 		sql.append(", title = ?", title);
 		sql.append(", `body` = ?", body);
+		sql.append(", hit = ?", hit);
 
 		return DBUtil.insert(Container.conn, sql);
 	}
 
-	public Map<String, Object> getArticle(int id) {
+	public Map<String, Object> getArticleById(int id) {
 		SecSql sql = new SecSql();
 
 		sql.append("SELECT *");
@@ -69,8 +70,10 @@ public class ArticleDao {
 	public List<Article> getArticles() {
 		SecSql sql = new SecSql();
 
-		sql.append("SELECT *");
-		sql.append("FROM article");
+		sql.append("SELECT A.*, M.name AS extra__writer");
+		sql.append("FROM article AS A");
+		sql.append("INNER JOIN `member` AS M");		
+		sql.append("ON A.memberId = M.id");		
 		sql.append("ORDER BY id DESC;");
 
 		List<Article> articles = new ArrayList<>();
@@ -80,6 +83,16 @@ public class ArticleDao {
 			articles.add(new Article(articleMap));
 		}
 		return articles;
+	}
+
+	public void increaseHit(int id) {
+		SecSql sql = new SecSql();
+
+		sql.append("UPDATE article");
+		sql.append("SET hit = hit + 1");
+		sql.append("WHERE id = ?", id);
+
+		DBUtil.update(Container.conn, sql);
 	}
 
 }

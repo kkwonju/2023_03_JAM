@@ -31,8 +31,9 @@ public class ArticleController extends Controller {
 		String body = Container.sc.nextLine();
 
 		int memberId = Container.session.loginedMemberId;
+		int hit = 0;
 
-		int id = articleService.doWrite(memberId, title, body);
+		int id = articleService.doWrite(memberId, title, body, hit);
 
 		System.out.println(id + "번 글이 생성되었습니다");
 	}
@@ -48,23 +49,10 @@ public class ArticleController extends Controller {
 		}
 
 		System.out.println("== 게시물 목록 ==");
-		System.out.println(" 번호  /  제목  ");
-		
-		List<Member> members = MemberService.getMembers();
-		// DBUtil selectRow는 데이터의 마지막부터 가져온다? 검증 필요
-		
-//		for(int i = articles.size() - 1; i >= 0; i--){
-		for(int i = 0; i < articles.size(); i++) {
-			Article article = articles.get(i);
-			
-			String writerName = null;
-			for(Member member : members) {
-				if(member.id == article.memberId) {
-					writerName = member.name;
-					break;
-				}
-			}
-			System.out.printf("  %d   /   %s   /   %s   \n", article.id, writerName, article.title);
+		System.out.println(" 번호  /  작성자  /   제목   /   조회");
+		for (Article article : articles) {
+			System.out.printf("  %d   /   %s   /   %s   /   %d   \n", article.id, article.extra__writer, article.title,
+					article.hit);
 		}
 	}
 
@@ -77,7 +65,7 @@ public class ArticleController extends Controller {
 		}
 		int id = Integer.parseInt(comDiv[2]);
 
-		Map<String, Object> articleMap = articleService.getArticle(id);
+		Map<String, Object> articleMap = articleService.getArticleById(id);
 
 		if (articleMap.isEmpty()) {
 			System.out.println(id + "번 글은 존재하지 않습니다");
@@ -85,12 +73,17 @@ public class ArticleController extends Controller {
 		}
 
 		Article article = new Article(articleMap);
+
+		articleService.increaseHit(id);
+
 		System.out.println("== 게시글 상세보기 ==");
 		System.out.println("번호 : " + article.id);
+		System.out.println("작성자 : " + article.memberId);
 		System.out.println("작성일 : " + Util.getNotDateTimeStr(article.regDate));
 		System.out.println("수정일 : " + Util.getNotDateTimeStr(article.updateDate));
 		System.out.println("제목 : " + article.title);
 		System.out.println("내용 : " + article.body);
+		System.out.println("조회 : " + article.hit);
 	}
 
 	/** 게시글 수정 */
