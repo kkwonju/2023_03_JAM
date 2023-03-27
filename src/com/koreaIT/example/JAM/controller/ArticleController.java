@@ -65,14 +65,12 @@ public class ArticleController extends Controller {
 		}
 		int id = Integer.parseInt(comDiv[2]);
 
-		Map<String, Object> articleMap = articleService.getArticleById(id);
+		Article article = articleService.getArticleById(id);
 
-		if (articleMap.isEmpty()) {
+		if (article == null) {
 			System.out.println(id + "번 글은 존재하지 않습니다");
 			return;
 		}
-
-		Article article = new Article(articleMap);
 
 		articleService.increaseHit(id);
 
@@ -99,10 +97,15 @@ public class ArticleController extends Controller {
 		}
 		int id = Integer.parseInt(comDiv[2]);
 
-		int articlesCount = articleService.getArticlesCount(id);
+		Article article = articleService.getArticleById(id);
 
-		if (articlesCount == 0) {
+		if(article == null) {
 			System.out.println(id + "번 글은 존재하지 않습니다");
+			return;
+		}
+		
+		if(article.memberId != Container.session.loginedMemberId) {
+			System.out.println("게시글에 대한 권한이 없습니다");
 			return;
 		}
 
@@ -131,10 +134,15 @@ public class ArticleController extends Controller {
 		}
 		int id = Integer.parseInt(comDiv[2]);
 
-		int articlesCount = articleService.getArticlesCount(id);
+		Article article = articleService.getArticleById(id);
 
-		if (articlesCount == 0) {
+		if(article == null) {
 			System.out.println(id + "번 글은 존재하지 않습니다");
+			return;
+		}
+		
+		if(article.memberId != Container.session.loginedMemberId) {
+			System.out.println("게시글에 대한 권한이 없습니다");
 			return;
 		}
 

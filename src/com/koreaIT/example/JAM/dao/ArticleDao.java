@@ -25,14 +25,19 @@ public class ArticleDao {
 		return DBUtil.insert(Container.conn, sql);
 	}
 
-	public Map<String, Object> getArticleById(int id) {
+	public Article getArticleById(int id) {
 		SecSql sql = new SecSql();
 
 		sql.append("SELECT *");
 		sql.append("FROM article");
 		sql.append("WHERE id = ?", id);
+		
+		Map<String, Object> articleMap = DBUtil.selectRow(Container.conn, sql);
+		if (articleMap.isEmpty()) {
+			return null;
+		}
 
-		return DBUtil.selectRow(Container.conn, sql);
+		return new Article(articleMap);
 		
 	}
 
