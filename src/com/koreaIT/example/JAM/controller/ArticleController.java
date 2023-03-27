@@ -3,6 +3,8 @@ package com.koreaIT.example.JAM.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.naming.directory.SearchControls;
+
 import com.koreaIT.example.JAM.container.Container;
 import com.koreaIT.example.JAM.dto.Article;
 import com.koreaIT.example.JAM.dto.Member;
@@ -31,17 +33,31 @@ public class ArticleController extends Controller {
 		String body = Container.sc.nextLine();
 
 		int memberId = Container.session.loginedMemberId;
-		int hit = 0;
 
-		int id = articleService.doWrite(memberId, title, body, hit);
+		int id = articleService.doWrite(memberId, title, body);
 
 		System.out.println(id + "번 글이 생성되었습니다");
 	}
 
 	/** 게시글 목록 출력 */
-	public void showList() {
+	public void showList(String command) {
+		String[] cmdBits = command.split(" ");
 
-		List<Article> articles = articleService.getArticles();
+		int page = 1;
+		String searchKeyword = null;
+
+		// 몇 페이지
+		if (cmdBits.length >= 3) {
+			page = Integer.parseInt(cmdBits[2]);
+		}
+		// 검색어
+		if (cmdBits.length >= 4) {
+			searchKeyword = cmdBits[3];
+		}
+		// 한 페이지에 5개씩
+		int itemsInAPage = 5;
+
+		List<Article> articles = articleService.getForPrintArticles(page, itemsInAPage, searchKeyword);
 
 		if (articles.size() == 0) {
 			System.out.println("게시글이 없습니다");
@@ -99,12 +115,12 @@ public class ArticleController extends Controller {
 
 		Article article = articleService.getArticleById(id);
 
-		if(article == null) {
+		if (article == null) {
 			System.out.println(id + "번 글은 존재하지 않습니다");
 			return;
 		}
-		
-		if(article.memberId != Container.session.loginedMemberId) {
+
+		if (article.memberId != Container.session.loginedMemberId) {
 			System.out.println("게시글에 대한 권한이 없습니다");
 			return;
 		}
@@ -136,12 +152,12 @@ public class ArticleController extends Controller {
 
 		Article article = articleService.getArticleById(id);
 
-		if(article == null) {
+		if (article == null) {
 			System.out.println(id + "번 글은 존재하지 않습니다");
 			return;
 		}
-		
-		if(article.memberId != Container.session.loginedMemberId) {
+
+		if (article.memberId != Container.session.loginedMemberId) {
 			System.out.println("게시글에 대한 권한이 없습니다");
 			return;
 		}

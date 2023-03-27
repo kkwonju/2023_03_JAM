@@ -86,19 +86,15 @@ public class App {
 			/* 게시물 작성 */
 		} else if (command.equals("article write")) {
 			articleController.doWrite();
-
 			/* 게시물 목록 출력 */
-		} else if (command.equals("article list")) {
-			articleController.showList();
-
+		} else if (command.startsWith("article list ")) {
+			articleController.showList(command);
 			/* 게시글 수정 */
 		} else if (command.startsWith("article modify ")) {
 			articleController.doModify(command);
-
 			/* 게시글 상세보기 */
 		} else if (command.startsWith("article detail ")) {
 			articleController.showDetail(command);
-
 			/* 게시글 삭제 */
 		} else if (command.startsWith("article delete ")) {
 			articleController.doDelete(command);

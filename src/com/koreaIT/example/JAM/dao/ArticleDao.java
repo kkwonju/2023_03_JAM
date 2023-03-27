@@ -10,8 +10,8 @@ import com.koreaIT.example.JAM.util.DBUtil;
 import com.koreaIT.example.JAM.util.SecSql;
 
 public class ArticleDao {
-	
-	public int doWrite(int memberId, String title, String body, int hit) {
+
+	public int doWrite(int memberId, String title, String body) {
 		SecSql sql = new SecSql();
 
 		sql.append("INSERT INTO article");
@@ -20,7 +20,7 @@ public class ArticleDao {
 		sql.append(", memberId = ?", memberId);
 		sql.append(", title = ?", title);
 		sql.append(", `body` = ?", body);
-		sql.append(", hit = ?", hit);
+		sql.append(", hit = ?", 0);
 
 		return DBUtil.insert(Container.conn, sql);
 	}
@@ -31,14 +31,14 @@ public class ArticleDao {
 		sql.append("SELECT *");
 		sql.append("FROM article");
 		sql.append("WHERE id = ?", id);
-		
+
 		Map<String, Object> articleMap = DBUtil.selectRow(Container.conn, sql);
 		if (articleMap.isEmpty()) {
 			return null;
 		}
 
 		return new Article(articleMap);
-		
+
 	}
 
 	public int getArticlesCount(int id) {
@@ -77,8 +77,8 @@ public class ArticleDao {
 
 		sql.append("SELECT A.*, M.name AS extra__writer");
 		sql.append("FROM article AS A");
-		sql.append("INNER JOIN `member` AS M");		
-		sql.append("ON A.memberId = M.id");		
+		sql.append("INNER JOIN `member` AS M");
+		sql.append("ON A.memberId = M.id");
 		sql.append("ORDER BY id DESC;");
 
 		List<Article> articles = new ArrayList<>();
@@ -98,6 +98,48 @@ public class ArticleDao {
 		sql.append("WHERE id = ?", id);
 
 		DBUtil.update(Container.conn, sql);
+	}
+
+	public List<Article> getForPrintArticles(Map<String, Object> args) {
+		SecSql sql = new SecSql();
+
+		String searchKeyword = "";
+
+		if (args.containsKey("searchKeyword")) {
+			searchKeyword = (String) args.get("searchKeyword");
+		}
+
+		int limitFrom = -1;
+		int limitTake = -1;
+
+		if (args.containsKey("limitFrom")) {
+			limitFrom = (int) args.get("limitFrom");
+		}
+
+		if (args.containsKey("limitFrom")) {
+			limitTake = (int) args.get("limitTake");
+		}
+
+		sql.append("SELECT A.*, M.name AS extra__writer");
+		sql.append("FROM article AS A");
+		sql.append("INNER JOIN `member` AS M");
+		sql.append("ON A.memberId = M.id");
+		if (searchKeyword.length() > 0) {
+			sql.append("WHERE A.title LIKE CONCAT('%',?,'%')", searchKeyword);
+		}
+		sql.append("ORDER BY id DESC");
+		if (limitFrom != -1) {
+			sql.append("LIMIT ?, ?", limitFrom, limitTake);
+		}
+
+		List<Map<String, Object>> articleListMaps = DBUtil.selectRows(Container.conn, sql);
+
+		List<Article> articles = new ArrayList<>();
+
+		for (Map<String, Object> articleMap : articleListMaps) {
+			articles.add(new Article(articleMap));
+		}
+		return articles;
 	}
 
 }
